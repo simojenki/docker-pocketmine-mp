@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+
+chown -R minecraft:minecraft /data
+chown -R minecraft:minecraft /minecraft
