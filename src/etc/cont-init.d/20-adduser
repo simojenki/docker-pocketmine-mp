@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+PUID=${PUID:-1099}
+PGID=${PGID:-1099}
+
+groupadd \
+    --gid "$PGID" \
+    minecraft
+
+useradd \
+    --home-dir "/minecraft" \
+    --gid minecraft \
+    --no-create-home \
+    --uid "$PUID" \
+    --shell "/usr/sbin/nologin" \
+    minecraft
+
+echo "User minecraft(uid:$(id -u minecraft), gid:$(id -g minecraft))"
+

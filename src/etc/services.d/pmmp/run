@@ -4,4 +4,4 @@ with-contenv
 s6-envuidgid minecraft
 
 cd /minecraft
-/usr/local/bin/php ./PocketMine-MP.phar --no-wizard
+./start.sh --no-wizard

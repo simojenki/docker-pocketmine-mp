@@ -2,34 +2,31 @@ FROM ubuntu:latest
 
 MAINTAINER simojenki
 
-# Install dependencies
-RUN apt-get update && \
-	apt-get -y install wget sudo && \
-	rm -rf /var/lib/apt/lists/*
+ARG OVERLAY_VERSION="v1.22.1.0"
+ARG PHP_VERSION=7.2
+ARG POCKETMINE_VERSION=3.9.3
 
-RUN	mkdir -p /data /minecraft
-WORKDIR /minecraft
+RUN mkdir -p /data /minecraft
 
-RUN wget -q -O - https://jenkins.pmmp.io/job/PHP-7.2-Aggregate/lastSuccessfulBuild/artifact/PHP-7.2-Linux-x86_64.tar.gz > /minecraft/PHP-7.2-Linux-x86_64.tar.gz && \
-  cd /minecraft && \
-	tar -xvf PHP-7.2-Linux-x86_64.tar.gz && \
-	rm PHP-7.2-Linux-x86_64.tar.gz
+ADD https://jenkins.pmmp.io/job/PHP-$PHP_VERSION-Aggregate/lastSuccessfulBuild/artifact/PHP-$PHP_VERSION-Linux-x86_64.tar.gz /tmp/
+RUN gunzip -c /tmp/PHP-$PHP_VERSION-Linux-x86_64.tar.gz | tar -xf - -C /minecraft
 
-RUN wget -q -O - https://github.com/pmmp/PocketMine-MP/releases/download/3.9.3/PocketMine-MP.phar > /minecraft/PocketMine-MP.phar
+ADD https://github.com/pmmp/PocketMine-MP/releases/download/$POCKETMINE_VERSION/PocketMine-MP.phar /minecraft
 
-RUN wget -q -O - https://raw.githubusercontent.com/pmmp/PocketMine-MP/master/start.sh > /minecraft/start.sh && \
-  chmod +x /minecraft/start.sh
+ADD https://raw.githubusercontent.com/pmmp/PocketMine-MP/master/start.sh /minecraft
+RUN chmod +x /minecraft/start.sh
 
-ADD server.properties.default /minecraft/server.properties.default
-ADD pocketmine.yml.default /minecraft/pocketmine.yml.default
+ADD https://github.com/just-containers/s6-overlay/releases/download/$OVERLAY_VERSION/s6-overlay-amd64.tar.gz /tmp/
+RUN gunzip -c /tmp/s6-overlay-amd64.tar.gz | tar -xf - -C /
 
-ADD init.sh /init.sh
+ADD src/etc /etc
+ADD src/minecraft /minecraft
+
+RUN rm /tmp/*
 
 EXPOSE 19132/udp
 
 VOLUME /data
 
-ENV PUID 971
-ENV PGID 971
+ENTRYPOINT ["/init"]
 
-CMD [ "bash", "/init.sh" ]
