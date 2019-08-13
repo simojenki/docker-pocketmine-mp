@@ -1,4 +1,4 @@
-FROM php:7.2-cli
+FROM php:7.2-cli-alpine
 
 MAINTAINER simojenki
 
@@ -8,7 +8,7 @@ ARG POCKETMINE_VERSION=3.9.3
 
 RUN apk --update --no-cache add bash
 
-RUN	mkdir -p /data /minecraft
+RUN mkdir -p /data /minecraft
 
 #ADD https://jenkins.pmmp.io/job/PHP-$PHP_VERSION-Aggregate/lastSuccessfulBuild/artifact/PHP-$PHP_VERSION-Linux-x86_64.tar.gz /tmp/
 #RUN gunzip -c /tmp/PHP-$PHP_VERSION-Linux-x86_64.tar.gz | tar -xf - -C /minecraft
