@@ -1,7 +1,8 @@
-#!/usr/bin/execlineb -P
-
-with-contenv
-s6-envuidgid minecraft
+#!/usr/bin/with-contenv sh
 
 cd /minecraft
-./start.sh --no-wizard
+
+exec s6-setuidgid minecraft ./start.sh --no-wizard
+
+
+
