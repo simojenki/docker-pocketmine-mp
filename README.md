@@ -5,6 +5,8 @@ Container with PocketMine MP featuring:
 * easy user mappings (PGID, PUID)
 * imaged based on s6 overlay
 
+[Build](https://cloud.docker.com/u/simojenki/repository/docker/simojenki/pocketmine-mp)
+
 ## Usage
 
 ### CLI
